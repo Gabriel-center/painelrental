@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rental Tech · 14 Cases P3.9 · Painel LED para Venda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-base: #07111F;
+    --bg-surface: #0E1E33;
+    --bg-elevated: #142941;
+    --bg-elevated-2: #1A3252;
+    --border: #1F3A5C;
+    --border-strong: #2A4D7A;
+    --orange: #FF6B1A;
+    --orange-bright: #FF8534;
+    --orange-soft: rgba(255,107,26,0.12);
+    --orange-line: rgba(255,107,26,0.35);
+    --text: #ECF2F8;
+    --text-muted: #8FA3BD;
+    --text-dim: #5B7392;
+    --good: #34D399;
+    --warn: #FBBF24;
+    --crit: #F87171;
+    --shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background:
+      radial-gradient(1200px 600px at 90% -10%, rgba(255,107,26,0.08), transparent 60%),
+      radial-gradient(900px 500px at -10% 30%, rgba(26,80,150,0.15), transparent 60%),
+      var(--bg-base);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+
+  /* ---------- Header / Brand ---------- */
+  .brand-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--orange), #B8501A);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 4px 14px rgba(255,107,26,0.35), 0 0 0 1px rgba(255,255,255,0.06) inset;
+    flex-shrink: 0;
+  }
+  .brand-mark svg { width: 22px; height: 22px; }
+  .brand-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.18em;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+  .brand-name span { color: var(--orange); }
+  .brand-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+    margin-top: 1px;
+  }
+  .doc-ref {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    margin-bottom: 36px;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--orange-bright);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding: 5px 10px;
+    background: var(--orange-soft);
+    border: 1px solid var(--orange-line);
+    border-radius: 4px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--orange-bright);
+    box-shadow: 0 0 8px var(--orange-bright);
+  }
+  h1.hero-title {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 500;
+    font-size: clamp(28px, 5.5vw, 44px);
+    line-height: 1.1;
+    margin: 0 0 14px;
+    letter-spacing: -0.015em;
+    color: var(--text);
+  }
+  h1.hero-title em {
+    font-style: italic;
+    color: var(--orange-bright);
+    font-weight: 600;
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 720px;
+    margin: 0;
+  }
+
+  /* ---------- KPI Cards ---------- */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .kpi {
+    background: linear-gradient(180deg, var(--bg-elevated), var(--bg-surface));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 18px 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .kpi:hover { border-color: var(--border-strong); }
+  .kpi-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 500;
+    font-size: 30px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--text);
+  }
+  .kpi-value .unit {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-left: 4px;
+  }
+  .kpi-detail {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .kpi.highlight {
+    background: linear-gradient(180deg, rgba(255,107,26,0.10), rgba(255,107,26,0.02));
+    border-color: var(--orange-line);
+  }
+  .kpi.highlight .kpi-value { color: var(--orange-bright); }
+
+  /* ---------- Section ---------- */
+  section { margin-bottom: 40px; scroll-margin-top: 20px; }
+
+  /* ---------- Category Header (top-level grouping) ---------- */
+  .category {
+    margin: 56px 0 28px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+  .category:first-of-type { margin-top: 44px; }
+  .category-num {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--orange-bright);
+    margin-bottom: 10px;
+    padding: 4px 8px;
+    background: var(--orange-soft);
+    border: 1px solid var(--orange-line);
+    border-radius: 4px;
+  }
+  .category-title {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 500;
+    font-size: clamp(22px, 3.5vw, 30px);
+    line-height: 1.15;
+    margin: 0 0 8px;
+    letter-spacing: -0.015em;
+    color: var(--text);
+  }
+  .category-desc {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin: 0 0 24px;
+    max-width: 720px;
+  }
+
+  /* ---------- Context card (the buying narrative) ---------- */
+  .context-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--orange);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 22px;
+    margin-bottom: 28px;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .context-card strong { color: var(--text); font-weight: 600; }
+  .context-card .ctx-label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: var(--orange-bright);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .section-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background: var(--orange);
+  }
+  .section-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------- Spec Grid ---------- */
+  .spec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .spec-item {
+    background: var(--bg-surface);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .spec-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .spec-value {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .spec-value .accent { color: var(--orange-bright); }
+
+  /* ---------- Quality Hero (the big stat) ---------- */
+  .quality-hero {
+    background:
+      linear-gradient(135deg, rgba(255,107,26,0.06), transparent 60%),
+      var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 24px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (min-width: 720px) {
+    .quality-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; }
+  }
+  .reliability-num {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 500;
+    font-size: clamp(48px, 9vw, 76px);
+    line-height: 1;
+    color: var(--orange-bright);
+    letter-spacing: -0.03em;
+  }
+  .reliability-num .pct {
+    font-size: 0.5em;
+    color: var(--text-muted);
+    margin-left: 4px;
+    vertical-align: 0.4em;
+    letter-spacing: 0;
+  }
+  .reliability-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .reliability-sub {
+    color: var(--text-muted);
+    font-size: 13.5px;
+    margin-top: 10px;
+    line-height: 1.55;
+  }
+
+  /* Pixel grid visual */
+  .pixel-vis {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .pixel-grid {
+    display: grid;
+    grid-template-columns: repeat(40, 1fr);
+    gap: 2px;
+    aspect-ratio: 40/14;
+    padding: 14px;
+    background: var(--bg-base);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .pixel-grid div {
+    background: var(--good);
+    border-radius: 1px;
+    opacity: 0.85;
+  }
+  .pixel-grid div.bad { background: var(--orange); opacity: 1; box-shadow: 0 0 4px var(--orange-bright); }
+  .pixel-vis-legend {
+    display: flex;
+    gap: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 1px;
+    background: var(--good);
+  }
+  .legend-dot.bad::before { background: var(--orange); }
+  .pixel-vis-caption {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ---------- Chart ---------- */
+  .chart-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 16px 16px;
+  }
+  .chart-controls {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    padding: 7px 11px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .chip:hover { color: var(--text); border-color: var(--orange-line); }
+  .chip.active {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: #0A0A0A;
+    font-weight: 600;
+  }
+  .chart {
+    width: 100%;
+    height: 240px;
+    display: block;
+  }
+  .chart-axis-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    fill: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+  .chart-axis-line { stroke: var(--border); stroke-width: 1; }
+  .chart-bar {
+    fill: var(--orange);
+    transition: fill 0.15s, opacity 0.15s;
+    cursor: pointer;
+  }
+  .chart-bar:hover { fill: var(--orange-bright); }
+  .chart-bar.muted { fill: var(--bg-elevated-2); }
+  .chart-bar-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    fill: var(--text-muted);
+    text-anchor: middle;
+  }
+  .chart-bar-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    fill: var(--text);
+    text-anchor: middle;
+  }
+
+  /* ---------- Case cards ---------- */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .case-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .case-card:hover { border-color: var(--border-strong); }
+  .case-card[open] { border-color: var(--orange-line); }
+
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+
+  .case-summary {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    transition: background 0.15s;
+  }
+  .case-summary:hover { background: var(--bg-elevated); }
+
+  .case-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--orange-bright);
+    background: var(--orange-soft);
+    border: 1px solid var(--orange-line);
+    padding: 6px 9px;
+    border-radius: 5px;
+    min-width: 52px;
+    text-align: center;
+  }
+  .case-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .case-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .case-summary-stats {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+  .case-summary-stats .sep { color: var(--text-dim); margin: 0 6px; }
+  .chevron {
+    width: 20px;
+    height: 20px;
+    color: var(--text-dim);
+    transition: transform 0.2s, color 0.15s;
+    flex-shrink: 0;
+  }
+  details[open] .chevron { transform: rotate(180deg); color: var(--orange-bright); }
+
+  .case-detail {
+    padding: 6px 16px 18px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .metric-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-info { min-width: 0; }
+  .metric-name {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .metric-bar-track {
+    height: 4px;
+    background: var(--bg-elevated-2);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .metric-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--orange), var(--orange-bright));
+    border-radius: 2px;
+    transition: width 0.4s;
+  }
+  .metric-bar-fill.zero {
+    background: var(--good);
+    width: 100% !important;
+    opacity: 0.25;
+  }
+  .metric-bar-fill.na {
+    background: repeating-linear-gradient(45deg, var(--bg-elevated-2), var(--bg-elevated-2) 4px, var(--border) 4px, var(--border) 8px);
+    width: 100% !important;
+  }
+  .metric-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    text-align: right;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .metric-value .of {
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+  .metric-value.zero { color: var(--good); }
+  .metric-value.na { color: var(--text-dim); font-style: italic; }
+  .case-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 14px;
+    padding: 10px 12px;
+    background: var(--orange-soft);
+    border-left: 2px solid var(--orange);
+    border-radius: 0 4px 4px 0;
+    font-style: italic;
+  }
+  .case-note strong {
+    color: var(--text);
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* dot indicators in summary */
+  .dot-row {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--good);
+    flex-shrink: 0;
+  }
+  .dot.warn { background: var(--warn); }
+  .dot.crit { background: var(--orange); }
+  .dot.na { background: var(--text-dim); }
+
+  /* ---------- Totals row ---------- */
+  .totals-bar {
+    background: linear-gradient(180deg, var(--bg-elevated), var(--bg-surface));
+    border: 1px solid var(--orange-line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+  }
+  .totals-bar .kpi-label { color: var(--orange-bright); }
+  .totals-bar .kpi-value {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .totals-bar .kpi-detail {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ---------- Extras / Bonus ---------- */
+  .extras-card {
+    background:
+      linear-gradient(135deg, rgba(255,107,26,0.05), transparent 70%),
+      var(--bg-surface);
+    border: 1px solid var(--orange-line);
+    border-radius: 12px;
+    padding: 22px 22px;
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+  }
+  .extras-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: var(--orange-soft);
+    border: 1px solid var(--orange-line);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+  .extras-icon svg { width: 22px; height: 22px; color: var(--orange-bright); }
+  .extras-content { min-width: 0; }
+  .extras-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text);
+    margin: 0 0 4px;
+  }
+  .extras-desc {
+    color: var(--text-muted);
+    font-size: 13.5px;
+    margin: 0;
+  }
+
+  /* ---------- Highlights / Selling points ---------- */
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .highlight-item {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .highlight-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: var(--orange-soft);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+  .highlight-icon svg { width: 16px; height: 16px; color: var(--orange-bright); }
+  .highlight-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .highlight-text strong {
+    color: var(--text);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+    font-size: 13.5px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+
+  /* Mobile tweaks */
+  @media (max-width: 540px) {
+    .container { padding: 18px 14px 60px; }
+    .case-summary { grid-template-columns: auto 1fr auto; padding: 12px 12px; }
+    .case-detail { padding: 4px 12px 14px; }
+    .extras-card { padding: 18px 16px; }
+    .quality-hero { padding: 22px 18px; }
+    .kpi { padding: 14px 14px 13px; }
+    .kpi-value { font-size: 26px; }
+    .pixel-grid { grid-template-columns: repeat(30, 1fr); aspect-ratio: 30/10; }
+    .case-summary-stats { font-size: 11px; }
+  }
+
+  /* Accessibility focus */
+  summary:focus-visible {
+    outline: 2px solid var(--orange-bright);
+    outline-offset: -2px;
+  }
+  .chip:focus-visible {
+    outline: 2px solid var(--orange-bright);
+    outline-offset: 2px;
+  }
+
+  /* Print-friendly hint */
+  @media print {
+    body { background: white; color: black; }
+    details { break-inside: avoid; }
+    details > summary { pointer-events: none; }
+    details:not([open]) > div { display: block !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- BRAND BAR -->
+  <div class="brand-bar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="5" width="18" height="14" rx="1.5" stroke="#0A0A0A" stroke-width="2"/>
+          <path d="M7 9h2v2H7zM11 9h2v2h-2zM15 9h2v2h-2zM7 13h2v2H7zM11 13h2v2h-2zM15 13h2v2h-2z" fill="#0A0A0A"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">RENTAL <span>TECH</span></div>
+        <div class="brand-tag">AUDIOVISUAL E INFORMÁTICA</div>
+      </div>
+    </div>
+    <div class="doc-ref">DOC · P3.9 / REV.2026-05</div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">VENDA · SEGUNDO DONO · TESTADOS</div>
+    <h1 class="hero-title">
+      14 Cases de Painel <em>P3.9</em> — Sistema Novastar, prontos para uso.
+    </h1>
+    <p class="hero-sub">
+      Lote completo de cases (6 placas cada, exceto Case 14) revisados peça por peça. Todos os painéis ligam e exibem imagem normalmente. As ocorrências listadas são desgastes naturais do uso em locação que afetam, no máximo, o ritmo de montagem — não a operação.
+    </p>
+  </header>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi highlight">
+      <div class="kpi-label">Confiabilidade de Pixel</div>
+      <div class="kpi-value">99,99<span class="unit">%</span></div>
+      <div class="kpi-detail">191 / 2.752.512 pixels</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Cases</div>
+      <div class="kpi-value">14</div>
+      <div class="kpi-detail">≈ 42 m² totais</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Placas</div>
+      <div class="kpi-value">84</div>
+      <div class="kpi-detail">1 requer troca de receiver</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Módulos Sobressalentes</div>
+      <div class="kpi-value">9</div>
+      <div class="kpi-detail">Inclusos no lote</div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- CATEGORY 01 — INFORMAÇÕES GERAIS -->
+  <!-- ============================================ -->
+  <div class="category">
+    <span class="category-num">01 / VISÃO GERAL</span>
+    <h2 class="category-title">Informações Gerais</h2>
+    <p class="category-desc">Histórico, qualidade global do lote e itens inclusos.</p>
+  </div>
+
+  <div class="context-card">
+    <span class="ctx-label">Histórico do equipamento</span>
+    Adquirimos este painel já com <strong>diversos defeitos</strong>, e ao longo do uso fomos <strong>corrigindo a maior parte deles</strong>. Os apontamentos detalhados neste documento são o que ainda permanece — ajustes pontuais que podem ser feitos no longo prazo e que <strong>não comprometem a operação</strong>. Este dashboard existe justamente para dar total transparência da condição atual.
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2 class="section-title">Qualidade de Imagem</h2>
+      <span class="section-meta">CONFIABILIDADE GLOBAL</span>
+    </div>
+    <div class="quality-hero">
+      <div>
+        <div class="reliability-label">PIXELS OPERACIONAIS</div>
+        <div class="reliability-num">99,9931<span class="pct">%</span></div>
+        <p class="reliability-sub">
+          Em mais de <strong style="color: var(--text);">2,75 milhões</strong> de pixels somados no lote, foram contabilizados <strong style="color: var(--orange-bright);">191 pixels com defeito</strong> — média de cerca de 14 por case, distribuídos e imperceptíveis em distância normal de visualização.
+        </p>
+      </div>
+      <div class="pixel-vis">
+        <div class="pixel-grid" id="pixelGrid" aria-label="Visualização proporcional dos pixels com defeito"></div>
+        <div class="pixel-vis-legend">
+          <span class="legend-dot">pixels operacionais</span>
+          <span class="legend-dot bad">defeitos (ampliados p/ visualização)</span>
+        </div>
+        <div class="pixel-vis-caption">Representação proporcional — quadrados ≙ amostra do lote completo.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2 class="section-title">Incluso no Lote</h2>
+      <span class="section-meta">SOBRESSALENTES</span>
+    </div>
+    <div class="extras-card">
+      <div class="extras-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+      </div>
+      <div class="extras-content">
+        <h3 class="extras-title">+ 9 módulos de substituição</h3>
+        <p class="extras-desc">Módulos extras em estados variados, prontos para serem usados como reposição em caso de necessidade. <span style="color: var(--text);">Inclusos sem custo adicional.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- CATEGORY 02 — INFORMAÇÕES DAS PLACAS -->
+  <!-- ============================================ -->
+  <div class="category">
+    <span class="category-num">02 / ESPECIFICAÇÕES</span>
+    <h2 class="category-title">Informações das Placas</h2>
+    <p class="category-desc">Características técnicas dos painéis e diferenciais do equipamento.</p>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2 class="section-title">Ficha Técnica</h2>
+      <span class="section-meta">P3.9 / NOVASTAR</span>
+    </div>
+    <div class="spec-grid">
+      <div class="spec-item">
+        <span class="spec-label">Pixel Pitch</span>
+        <span class="spec-value"><span class="accent">P3.9</span> &nbsp;·&nbsp; 3,9 mm</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Medida por placa</span>
+        <span class="spec-value">0,5 × 1,0 m</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Resolução por placa</span>
+        <span class="spec-value">128 × 256 px</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Configuração por case</span>
+        <span class="spec-value">6 placas (3 × 2 m)</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Módulos por placa</span>
+        <span class="spec-value">8 módulos</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Fontes por placa</span>
+        <span class="spec-value">2 fontes</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Alimentação</span>
+        <span class="spec-value">220 V</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Receiver Card</span>
+        <span class="spec-value">MRV208-1</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Identificador</span>
+        <span class="spec-value" style="font-family:'IBM Plex Mono', monospace; font-size: 13px;">MGKB42214U</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Sistema</span>
+        <span class="spec-value">NovaStar</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 14px;">
+      <div class="highlights">
+        <div class="highlight-item">
+          <div class="highlight-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <div class="highlight-text">
+            <strong>Refresh rate otimizado</strong>
+            Arquivo <span style="font-family:'IBM Plex Mono', monospace; color: var(--orange-bright);">.RCGFX</span> refeito para elevar o refresh rate por módulo, deixando o painel mais adequado para fotografia/vídeo do que um equivalente novo de fábrica.
+          </div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>
+          </div>
+          <div class="highlight-text">
+            <strong>100% testado individualmente</strong>
+            Cada case e cada placa foi inspecionado. Todos ligam e exibem imagem (exceto a 6ª placa do Case 14, que retoma o funcionamento com troca da receiver). Os apontamentos a seguir são para total transparência da condição cosmética/mecânica.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- CATEGORY 03 — INFORMAÇÕES RELATIVAS A CADA CASE -->
+  <!-- ============================================ -->
+  <div class="category">
+    <span class="category-num">03 / INSPEÇÃO</span>
+    <h2 class="category-title">Informações Relativas a Cada Case</h2>
+    <p class="category-desc">Apontamentos detalhados por case. Os totais consolidados aparecem ao final desta seção.</p>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2 class="section-title">Comparativo entre Cases</h2>
+      <span class="section-meta">SELECIONE A MÉTRICA</span>
+    </div>
+    <div class="chart-card">
+      <div class="chart-controls" role="tablist">
+        <button class="chip active" data-metric="bad">Pixels ruins</button>
+        <button class="chip" data-metric="trilha">Trilha</button>
+        <button class="chip" data-metric="cabos">Cabos soltos</button>
+        <button class="chip" data-metric="travas">Travas ausentes</button>
+        <button class="chip" data-metric="pino">Pino guia ausente</button>
+      </div>
+      <svg class="chart" id="chart" viewBox="0 0 1000 240" preserveAspectRatio="none" role="img"></svg>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2 class="section-title">Inspeção Caso a Caso</h2>
+      <span class="section-meta">14 CASES · CLIQUE PARA EXPANDIR</span>
+    </div>
+    <div class="cases-grid" id="casesGrid"></div>
+
+    <div class="totals-bar">
+      <div>
+        <div class="kpi-label">Total · Pixels ruins</div>
+        <div class="kpi-value">191</div>
+        <div class="kpi-detail">de 2.752.512 (0,0069%)</div>
+      </div>
+      <div>
+        <div class="kpi-label">Total · Trilha</div>
+        <div class="kpi-value">48</div>
+        <div class="kpi-detail">14 cases</div>
+      </div>
+      <div>
+        <div class="kpi-label">Cabos soltos</div>
+        <div class="kpi-value">10</div>
+        <div class="kpi-detail">facilita manutenção</div>
+      </div>
+      <div>
+        <div class="kpi-label">Travas ausentes</div>
+        <div class="kpi-value">9</div>
+        <div class="kpi-detail">8 macho · 1 fêmea</div>
+      </div>
+      <div>
+        <div class="kpi-label">Pino guia ausente</div>
+        <div class="kpi-value">87</div>
+        <div class="kpi-detail">de 168 (todos os cases)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- CATEGORY 04 — EXPLICAÇÕES -->
+  <!-- ============================================ -->
+  <div class="category">
+    <span class="category-num">04 / GLOSSÁRIO</span>
+    <h2 class="category-title">Explicações</h2>
+    <p class="category-desc">Como ler os números deste relatório e o que cada apontamento significa na prática.</p>
+  </div>
+
+  <div class="highlights">
+    <div class="highlight-item">
+      <div class="highlight-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      </div>
+      <div class="highlight-text">
+        <strong>O que é uma "trilha"</strong>
+        Cada trilha equivale a <strong style="color: var(--orange-bright);">16 pixels</strong> exibindo cor diferente da esperada. Geralmente é um problema de conexão na placa que <strong>pode ser corrigido apenas com solda</strong> — não exige troca de componente.
+      </div>
+    </div>
+    <div class="highlight-item">
+      <div class="highlight-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z M3 9h18 M9 3v18"/></svg>
+      </div>
+      <div class="highlight-text">
+        <strong>Como ler os números</strong>
+        Cada métrica mostra o valor encontrado e o máximo possível por case (ex.: 7/12 pinos guia significa 7 dos 12 pinos do case estão ausentes; 1/18 travas significa 1 das 18 travas).
+      </div>
+    </div>
+    <div class="highlight-item">
+      <div class="highlight-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      </div>
+      <div class="highlight-text">
+        <strong>Impacto na operação</strong>
+        Nenhuma das ocorrências impede ligar o painel ou exibir imagem (única exceção: a 6ª placa do Case 14, resolvida com troca de receiver). Travas e pinos guia afetam apenas o tempo/precisão de encaixe na montagem.
+      </div>
+    </div>
+    <div class="highlight-item">
+      <div class="highlight-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="highlight-text">
+        <strong>Pino guia ausente</strong>
+        São pinos plásticos de alinhamento entre placas. Sua ausência não afeta a operação nem o encaixe firme — apenas exige um pouco mais de atenção visual ao posicionar as placas adjacentes durante a montagem.
+      </div>
+    </div>
+    <div class="highlight-item">
+      <div class="highlight-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+      <div class="highlight-text">
+        <strong>Cabos internos soltos</strong>
+        Cabos internos com fixação afrouxada — não impactam o funcionamento. Curiosamente, facilitam a substituição rápida de módulos durante manutenção.
+      </div>
+    </div>
+    <div class="highlight-item">
+      <div class="highlight-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      </div>
+      <div class="highlight-text">
+        <strong>Travas (macho / fêmea)</strong>
+        São as travas mecânicas que prendem uma placa à outra. Quando ausentes, ainda é possível montar com firmeza — a estrutura se sustenta pelos demais pontos de fixação e pelos cases.
+      </div>
+    </div>
+  </div>
+
+
+
+  <footer>
+    <span>RENTAL TECH · LOTE P3.9 (14 CASES)</span>
+    <span>DASHBOARD · DOC INTERNO · 2026</span>
+  </footer>
+
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+const PER_CASE_MAX = {
+  bad: 196608,    // pixels per case
+  trilha: null,   // count-only metric
+  cabos: 6,       // 6 internal cables per case
+  travasM: 18,
+  travasF: 18,
+  travasTotal: 36,
+  pino: 12
+};
+
+// Cases in display order (1..14). null = not measured / "X"
+const CASES = [
+  { id: 1,  boards: 6, bad: 8,  trilha: 1,  cabos: 1, travasM: 1, travasF: 0, pino: 7,  note: null },
+  { id: 2,  boards: 6, bad: 4,  trilha: 2,  cabos: 1, travasM: 0, travasF: 0, pino: 6,  note: null },
+  { id: 3,  boards: 6, bad: 11, trilha: 2,  cabos: 0, travasM: 0, travasF: 0, pino: 5,  note: null },
+  { id: 4,  boards: 6, bad: 13, trilha: 3,  cabos: 0, travasM: 0, travasF: 0, pino: 4,  note: null },
+  { id: 5,  boards: 6, bad: 8,  trilha: 0,  cabos: 0, travasM: 1, travasF: 0, pino: 8,  note: null },
+  { id: 6,  boards: 6, bad: 20, trilha: 5,  cabos: 0, travasM: 0, travasF: 0, pino: 7,  note: null },
+  { id: 7,  boards: 6, bad: 24, trilha: 5,  cabos: 2, travasM: 0, travasF: 0, pino: 5,  note: null },
+  { id: 8,  boards: 6, bad: 14, trilha: 1,  cabos: 0, travasM: 1, travasF: 1, pino: 6,  note: null },
+  { id: 9,  boards: 6, bad: 15, trilha: 5,  cabos: 3, travasM: 1, travasF: 0, pino: 10, note: null },
+  { id: 10, boards: 6, bad: 8,  trilha: 0,  cabos: 0, travasM: 0, travasF: 0, pino: 6,  note: 'Um dos melhores cases do lote — apenas pinos guia e poucos pixels ruins.' },
+  { id: 11, boards: 6, bad: 8,  trilha: 3,  cabos: 1, travasM: 0, travasF: 0, pino: 5,  note: null },
+  { id: 12, boards: 6, bad: 6,  trilha: 2,  cabos: 0, travasM: 0, travasF: 0, pino: 7,  note: null },
+  { id: 13, boards: 6, bad: 5,  trilha: 4,  cabos: 2, travasM: 0, travasF: 0, pino: 7,  note: null },
+  { id: 14, boards: 6, bad: 47, trilha: 15, cabos: 0, travasM: 4, travasF: 0, pino: 4,  note: '<strong>6ª placa:</strong> receiver com defeito (não exibe imagem) — resolve-se trocando a receiver card. Testada com uma receiver funcional, a placa apresenta 8 pixels danificados e 4 trilhas (já somados nos valores acima).' }
+];
+
+/* ---------- PIXEL GRID VISUAL ---------- */
+(function buildPixelGrid() {
+  const grid = document.getElementById('pixelGrid');
+  if (!grid) return;
+  // Match column count to actual CSS grid: 40 cols on desktop, 30 on mobile.
+  const cols = window.matchMedia('(max-width: 540px)').matches ? 30 : 40;
+  const rows = window.matchMedia('(max-width: 540px)').matches ? 10 : 14;
+  const total = cols * rows;
+  // Show ~14 "bad" cells out of total — proportional to ~13 per case visual feel,
+  // exaggerated only to be visible. Total bad in lote ≈ 0.0066% which would be invisible.
+  const badCount = 14;
+  const badIndices = new Set();
+  // distribute pseudo-randomly but deterministically
+  let seed = 7;
+  while (badIndices.size < badCount) {
+    seed = (seed * 9301 + 49297) % 233280;
+    badIndices.add(Math.floor((seed / 233280) * total));
+  }
+  const frag = document.createDocumentFragment();
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    if (badIndices.has(i)) d.className = 'bad';
+    frag.appendChild(d);
+  }
+  grid.appendChild(frag);
+})();
+
+/* ---------- CHART ---------- */
+function getMetricValue(c, metric) {
+  switch (metric) {
+    case 'bad': return c.bad;
+    case 'trilha': return c.trilha;
+    case 'cabos': return c.cabos;
+    case 'travas': {
+      if (c.travasM === null && c.travasF === null) return null;
+      return (c.travasM || 0) + (c.travasF || 0);
+    }
+    case 'pino': return c.pino;
+  }
+}
+
+function renderChart(metric) {
+  const svg = document.getElementById('chart');
+  svg.innerHTML = '';
+  const W = 1000, H = 240;
+  const padL = 36, padR = 16, padT = 18, padB = 38;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+
+  const values = CASES.map(c => getMetricValue(c, metric));
+  const numeric = values.map(v => (v == null ? 0 : v));
+  const max = Math.max(1, ...numeric);
+
+  // Y axis line
+  const axis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  axis.setAttribute('class', 'chart-axis-line');
+  axis.setAttribute('x1', padL); axis.setAttribute('x2', W - padR);
+  axis.setAttribute('y1', H - padB); axis.setAttribute('y2', H - padB);
+  svg.appendChild(axis);
+
+  // Y ticks (0, max/2, max)
+  [0, Math.round(max / 2), max].forEach(v => {
+    const y = H - padB - (v / max) * innerH;
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('class', 'chart-axis-label');
+    t.setAttribute('x', padL - 8);
+    t.setAttribute('y', y + 3);
+    t.setAttribute('text-anchor', 'end');
+    t.textContent = v;
+    svg.appendChild(t);
+    if (v !== 0) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('class', 'chart-axis-line');
+      line.setAttribute('x1', padL); line.setAttribute('x2', W - padR);
+      line.setAttribute('y1', y); line.setAttribute('y2', y);
+      line.setAttribute('stroke-dasharray', '2 4');
+      line.setAttribute('opacity', '0.6');
+      svg.appendChild(line);
+    }
+  });
+
+  const n = CASES.length;
+  const slotW = innerW / n;
+  const barW = Math.min(slotW * 0.62, 36);
+
+  CASES.forEach((c, i) => {
+    const v = values[i];
+    const isNA = v === null;
+    const display = isNA ? 0 : v;
+    const h = (display / max) * innerH;
+    const x = padL + i * slotW + (slotW - barW) / 2;
+    const y = H - padB - h;
+
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('class', isNA ? 'chart-bar muted' : 'chart-bar');
+    rect.setAttribute('x', x);
+    rect.setAttribute('y', isNA ? H - padB - 4 : y);
+    rect.setAttribute('width', barW);
+    rect.setAttribute('height', isNA ? 4 : Math.max(h, 1));
+    rect.setAttribute('rx', 2);
+    const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    title.textContent = `Case ${c.id} · ${isNA ? 'não verificado' : v}`;
+    rect.appendChild(title);
+    svg.appendChild(rect);
+
+    // value above bar
+    if (!isNA && v > 0) {
+      const vt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      vt.setAttribute('class', 'chart-bar-value');
+      vt.setAttribute('x', x + barW / 2);
+      vt.setAttribute('y', y - 5);
+      vt.textContent = v;
+      svg.appendChild(vt);
+    } else if (isNA) {
+      const vt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      vt.setAttribute('class', 'chart-bar-label');
+      vt.setAttribute('x', x + barW / 2);
+      vt.setAttribute('y', H - padB - 10);
+      vt.textContent = '—';
+      svg.appendChild(vt);
+    }
+
+    // case label
+    const lt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    lt.setAttribute('class', 'chart-bar-label');
+    lt.setAttribute('x', x + barW / 2);
+    lt.setAttribute('y', H - padB + 16);
+    lt.textContent = c.id < 10 ? '0' + c.id : c.id;
+    svg.appendChild(lt);
+  });
+}
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    renderChart(chip.dataset.metric);
+  });
+});
+renderChart('bad');
+
+/* ---------- CASES LIST ---------- */
+function severityDot(value, max) {
+  if (value === null || value === undefined) return '<span class="dot na" title="não verificado"></span>';
+  if (value === 0) return '<span class="dot" title="0"></span>';
+  if (max === null) {
+    // count-only — soft thresholds
+    if (value <= 2) return '<span class="dot warn"></span>';
+    return '<span class="dot crit"></span>';
+  }
+  const r = value / max;
+  if (r < 0.25) return '<span class="dot warn"></span>';
+  return '<span class="dot crit"></span>';
+}
+
+function renderMetric(label, value, max, opts = {}) {
+  const isNA = value === null || value === undefined;
+  let valueDisplay, barClass = '', fillStyle = '', valueClass = '';
+  if (isNA) {
+    valueDisplay = '—';
+    barClass = 'na';
+    valueClass = 'na';
+  } else if (value === 0) {
+    valueDisplay = max ? `0<span class="of"> / ${max}</span>` : '0';
+    barClass = 'zero';
+    valueClass = 'zero';
+  } else {
+    valueDisplay = max ? `${value}<span class="of"> / ${max}</span>` : `${value}`;
+    const pct = max ? Math.min(100, (value / max) * 100) : Math.min(100, value * 8); // count-only scaled
+    fillStyle = `width:${pct}%`;
+  }
+  return `
+    <div class="metric-row">
+      <div class="metric-info">
+        <div class="metric-name">${label}</div>
+        <div class="metric-bar-track">
+          <div class="metric-bar-fill ${barClass}" style="${fillStyle}"></div>
+        </div>
+      </div>
+      <div class="metric-value ${valueClass}">${valueDisplay}</div>
+    </div>
+  `;
+}
+
+function renderCase(c) {
+  const badPct = ((c.bad / PER_CASE_MAX.bad) * 100).toFixed(4);
+  const travasTotal = (c.travasM === null && c.travasF === null) ? null : (c.travasM || 0) + (c.travasF || 0);
+
+  const dots = `
+    ${severityDot(c.bad, PER_CASE_MAX.bad)}
+    ${severityDot(c.trilha, null)}
+    ${severityDot(c.cabos, PER_CASE_MAX.cabos)}
+    ${severityDot(travasTotal, PER_CASE_MAX.travasTotal)}
+    ${severityDot(c.pino, PER_CASE_MAX.pino)}
+  `;
+
+  const idStr = c.id < 10 ? '0' + c.id : c.id;
+  const boardCount = '6 placas';
+
+  // Travas: render macho and fêmea separately for all cases
+  const travasRows = renderMetric('Travas ausentes — macho', c.travasM, PER_CASE_MAX.travasM)
+                   + renderMetric('Travas ausentes — fêmea', c.travasF, PER_CASE_MAX.travasF);
+
+  return `
+  <details class="case-card">
+    <summary class="case-summary">
+      <span class="case-tag">CASE ${idStr}</span>
+      <div class="case-meta">
+        <span class="case-title">${boardCount} · ${c.bad} pixels ruins (${badPct}%)</span>
+        <span class="case-summary-stats">
+          <span class="dot-row">${dots}</span>
+        </span>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </summary>
+    <div class="case-detail">
+      ${renderMetric('Pixels ruins', c.bad, PER_CASE_MAX.bad)}
+      ${renderMetric('Trilha', c.trilha, null)}
+      ${renderMetric('Cabos internos soltos', c.cabos, PER_CASE_MAX.cabos)}
+      ${travasRows}
+      ${renderMetric('Pino guia ausente', c.pino, PER_CASE_MAX.pino)}
+      ${c.note ? `<div class="case-note">${c.note}</div>` : ''}
+    </div>
+  </details>
+  `;
+}
+
+document.getElementById('casesGrid').innerHTML = CASES.map(renderCase).join('');
+
+</script>
+</body>
+</html>
